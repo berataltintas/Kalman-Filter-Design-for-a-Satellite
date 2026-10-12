@@ -1,62 +1,62 @@
 # Kalman Filter Design for a Satellite
 
-Bu depo, bir uydunun tutum kestirimi için MATLAB tabanlı bir simülasyon ve çoklu **Multiplicative Extended Kalman Filter (MEKF)** yaklaşımı içerir.
+This repository contains a MATLAB-based simulation and a multi-**Multiplicative Extended Kalman Filter (MEKF)** approach for satellite attitude estimation.
 
-## İçerik
+## Contents
 
-Projede üç farklı kestirim akışı birlikte çalışır:
+Three different estimation flows work together in the project:
 
-- **Coarse mode (Güneş + Manyetometre):** TRIAD ile başlangıç ve vektör ölçümlerinden MEKF güncellemesi.
-- **Eclipse mode (Jiroskop + Manyetometre):** Güneş sensörü yokken (tutulma/gölge), jiroskop-bias ile manyetik ölçümden MEKF güncellemesi.
-- **Fine mode (Yıldız İzleyici + Jiroskop):** Yüksek doğruluklu yıldız izleyici ölçümü ve jiroskop bias kestirimi ile MEKF.
+- **Coarse mode (Sun + Magnetometer):** Initial attitude via TRIAD and MEKF update from vector measurements.
+- **Eclipse mode (Gyroscope + Magnetometer):** MEKF update from magnetic measurements with gyro-bias estimation when the sun sensor is unavailable (eclipse/shadow).
+- **Fine mode (Star Tracker + Gyroscope):** MEKF with high-accuracy star tracker measurements and gyroscope bias estimation.
 
-Simülasyon; yörünge yayılımı, gerçek tutum üretimi, sensör ölçüm üretimi ve filtre sonuçlarının karşılaştırmalı görselleştirmesini içerir.
+The simulation includes orbit propagation, ground-truth attitude generation, sensor measurement generation, and comparative visualization of filter results.
 
-## Proje Akışı
+## Project Flow
 
-`main.m` dosyası şu adımları yürütür:
+The `main.m` file performs the following steps:
 
-1. `init.m` ile yörünge/sensör/filtre parametrelerini kurar.
-2. `simulate_mode.m` ile coarse ve fine veri setlerini üretir.
-3. Coarse başlangıcını `coarse_triad.m` ile hesaplar.
-4. `coarse_mekf.m`, `eclipse_mekf.m` ve `mekf.m` ile filtreleri çalıştırır.
-5. Quaternion ve Euler (RPY) tabanlı hata ölçümlerini ve grafiklerini üretir.
+1. Sets orbit/sensor/filter parameters with `init.m`.
+2. Generates coarse and fine datasets with `simulate_mode.m`.
+3. Computes the coarse initial attitude with `coarse_triad.m`.
+4. Runs filters with `coarse_mekf.m`, `eclipse_mekf.m`, and `mekf.m`.
+5. Produces quaternion- and Euler (RPY)-based error metrics and plots.
 
-## Dosya Özeti
+## File Summary
 
-- `main.m`: Simülasyonun giriş noktası, filtre çağrıları, metrikler ve grafikler.
-- `init.m`: Yörünge, sensör gürültüleri, bias ve kovaryans parametreleri.
-- `simulate_mode.m`: Coarse/fine modlarında veri üretimi.
-- `mekf.m`: Fine mode için MEKF (star tracker + gyro bias).
-- `coarse_mekf.m`: Coarse mode için yön vektörü tabanlı MEKF.
-- `eclipse_mekf.m`: Tutulma koşullarında gyro + manyetometre tabanlı MEKF.
-- `coarse_triad.m`: Coarse başlangıç tutumunun TRIAD ile kestirimi.
-- `simulate_*.m`: Sensör ölçüm üreticileri (sun sensor, magnetometer, gyro, star tracker).
-- `propagate_orbit.m`, `attitude_truth.m`, `check_eclipse.m`: Yörünge, gerçek tutum ve tutulma modelleme yardımcıları.
+- `main.m`: Simulation entry point, filter calls, metrics, and plots.
+- `init.m`: Orbit, sensor noise, bias, and covariance parameters.
+- `simulate_mode.m`: Data generation for coarse/fine modes.
+- `mekf.m`: MEKF for fine mode (star tracker + gyro bias).
+- `coarse_mekf.m`: Direction-vector-based MEKF for coarse mode.
+- `eclipse_mekf.m`: Gyro + magnetometer-based MEKF under eclipse conditions.
+- `coarse_triad.m`: TRIAD-based estimation of coarse initial attitude.
+- `simulate_*.m`: Sensor measurement generators (sun sensor, magnetometer, gyro, star tracker).
+- `propagate_orbit.m`, `attitude_truth.m`, `check_eclipse.m`: Orbit, ground-truth attitude, and eclipse modeling helpers.
 
-## Gereksinimler
+## Requirements
 
-- MATLAB (depo MATLAB script/fonksiyonları ile çalışır)
-- Ek toolbox bağımlılığı kod içinde zorunlu tanımlı değildir; temel MATLAB lineer cebir fonksiyonları kullanılır.
+- MATLAB (the repository runs with MATLAB scripts/functions)
+- No additional toolbox dependency is strictly required by the code; core MATLAB linear algebra functions are used.
 
-## Çalıştırma
+## Running
 
-Repo kök dizininde MATLAB komut penceresinde:
+In the MATLAB command window at the repository root:
 
 ```matlab
 main
 ```
 
-## Üretilen Çıktılar
+## Generated Outputs
 
-Çalışma sonunda:
+At the end of the run:
 
-- Coarse, eclipse ve fine mode için tutum karşılaştırma grafikleri (True vs Estimate),
-- Yörünge grafiği,
-- Sensör ölçüm grafikleri,
-- Quaternion bileşen karşılaştırmaları,
-- Komut penceresinde RMSE ve RMS/max hata özetleri üretilir.
+- Attitude comparison plots (True vs Estimate) for coarse, eclipse, and fine modes,
+- Orbit plot,
+- Sensor measurement plots,
+- Quaternion component comparisons,
+- RMSE and RMS/max error summaries in the command window.
 
-## Lisans
+## License
 
-Bu proje [MIT License](LICENSE) ile lisanslanmıştır.
+This project is licensed under the [MIT License](LICENSE).
